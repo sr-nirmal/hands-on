@@ -3,6 +3,7 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app)
 
 @app.before_request
 def before_request():
@@ -16,13 +17,15 @@ def add_todo():
     data = request.get_json()
     g.todos.append(data['todo'])
 
-    return jsonify(response = "success")
+    dict = {"response" : g.todos, "size" : len(g.todos)}
+    return jsonify(dict)
 
 
 @app.route("/get-todo", method = ["GET"])
 def get_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
-    return jsonify(response = g.todos)
+    dict = {"response" : g.todos, "size" : len(g.todos)}
+    return jsonify(dict)
 
 
 @app.route("/delete-todo", method = ["POST"])
@@ -34,9 +37,12 @@ def delete_todo():
     for i in range(len(g.todos)):
         if(i["id"] == id):
             g.todos.pop(i)
-            return jsonify(response = "success") 
+            dict = {"response" : g.todos, "size" : len(g.todos)}
+            return jsonify(dict)
 
-    return jsonify(response = "not found")
+    dict = {"response" : g.todos, "size" : len(g.todos)}
+    return jsonify(dict)
+
 
 
 
@@ -52,9 +58,20 @@ def update_todo():
             g.todos[i]["decription"] = todo["decription"]
             g.todos[i]["deadline"] = todo["deadline"]
             g.todos[i]["completed"] = todo["completed"] 
-            return jsonify(response = "success") 
 
+            dict = {"response" : g.todos, "size" : len(g.todos)}
+            return jsonify(dict)
+
+            
     return jsonify(response = "not found")
+
+
+@app.route("/clear-todo", method = ["POST"])
+def get_todo():
+    # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
+    g.todos = []
+    dict = {"response" : g.todos, "size" : len(g.todos)}
+    return jsonify(dict)
 
 
 
