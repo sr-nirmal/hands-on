@@ -73,6 +73,21 @@ def get_todo():
     dict = {"response" : g.todos, "size" : len(g.todos)}
     return jsonify(dict)
 
+@app.route("/completed-todo", method = ["POST"])
+def get_todo():
+    # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
+    data = request.get_json()
+    id = data["id"]
+    for i in range(len(g.todos)):
+        if(i["id"] == id):
+            i["completed"] = True
+            dict = {"response" : g.todos, "size" : len(g.todos)}
+            return jsonify(dict)
+    dict = {"response" : "not found", "size" : len(g.todos)}
+    return jsonify(dict)
+    
+
+
 
 
 if __name__ == "__main__":
