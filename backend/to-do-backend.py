@@ -80,7 +80,8 @@ def completed_todo():
     id = data["id"]
     for i in range(len(g.todos)):
         if(i["id"] == id):
-            i["completed"] = True
+
+            i["completed"] = not i["completed"]
             dict = {"response" : g.todos, "size" : len(g.todos)}
             return jsonify(dict)
     dict = {"response" : "not found", "size" : len(g.todos)}
