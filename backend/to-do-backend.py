@@ -74,7 +74,7 @@ def get_todo():
     return jsonify(dict)
 
 @app.route("/completed-todo", method = ["POST"])
-def comleted_todo():
+def completed_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     data = request.get_json()
     id = data["id"]
