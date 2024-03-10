@@ -13,7 +13,8 @@ function App() {
     deadline: '',
     completed: false,
   });
-
+      
+  
   const handleChange = (e) => {
     setTodo({...todo, [e.target.name]: e.target.value});
   };
