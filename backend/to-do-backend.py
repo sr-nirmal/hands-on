@@ -11,7 +11,7 @@ def before_request():
     pass
 
 
-@app.route("/add-todo", method = ["POST"])
+@app.route("/add-todo", methods = ["POST"])
 def add_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     data = request.get_json()
@@ -21,14 +21,14 @@ def add_todo():
     return jsonify(dict)
 
 
-@app.route("/get-todo", method = ["GET"])
+@app.route("/get-todo", methods = ["GET"])
 def get_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     dict = {"response" : g.todos, "size" : len(g.todos)}
     return jsonify(dict)
 
 
-@app.route("/delete-todo", method = ["POST"])
+@app.route("/delete-todo", methods = ["POST"])
 def delete_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     data = request.get_json()
@@ -46,7 +46,7 @@ def delete_todo():
 
 
 
-@app.route("/update-todo", method = ["POST"])
+@app.route("/update-todo", methods = ["POST"])
 def update_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     data = request.get_json()
@@ -66,14 +66,14 @@ def update_todo():
     return jsonify(response = "not found")
 
 
-@app.route("/clear-todo", method = ["POST"])
+@app.route("/clear-todo", methods = ["POST"])
 def clear_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     g.todos = []
     dict = {"response" : g.todos, "size" : len(g.todos)}
     return jsonify(dict)
 
-@app.route("/completed-todo", method = ["POST"])
+@app.route("/completed-todo", methods = ["POST"])
 def completed_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     data = request.get_json()
