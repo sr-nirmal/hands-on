@@ -67,7 +67,7 @@ def update_todo():
 
 
 @app.route("/clear-todo", method = ["POST"])
-def get_todo():
+def clear_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     g.todos = []
     dict = {"response" : g.todos, "size" : len(g.todos)}
