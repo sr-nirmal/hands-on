@@ -42,31 +42,43 @@ function App() {
   
 const handleSubmit = async (e) => {
   e.preventDefault();
-  try{
-    //make post request to server
-    await axios.post('http://localhost:5000/add-todo', todo);
-    //updating local state
-    setTodos([...todos, todo]);
-    
-  } catch(err){
-    //log error if any
-     
-    console.log('Error posting',err);
-    console.log(todo);
 
-    //updating local state - FOR TESTING (REMOVE LATER)
-    setTodos([...todos, todo]);
-    console.log(todo);
-    //resetting form fields
-    setTodo({
-      id: todo.id + 1,
-      title: '',
-      description: '',
-      deadline: '',
-      completed: false,
+  try {
+    //  post request to server
+    const response = await axios({
+      method: 'post',
+      url: 'http://localhost:5000/add-todo',
+      data: todo,
     });
+
+    // check if 'response' and 'response.data' are sent back
+    if (response && response.data) {
+      // print successful response
+      console.log('Response:', response.data);
+
+      // when server returns the updated todo
+      setTodos([...todos, response.data.todo]);
+      setTodo({
+        id: response.data.todo.id + 1,
+        title: '',
+        description: '',
+        deadline: '',
+        completed: false,
+      });
+    } else {
+      console.error('Invalid response:', response);
+    }
+  } catch (error) {
+    // handle error
+    console.error('Error:', error);
+    // log error 
+    console.log(error.response ? error.response.data : error.message);
+
+    // update local state for testing (remove later)
+    setTodos([...todos, todo]);
   }
 };
+
 
   return (
     <>
