@@ -13,30 +13,32 @@ function App() {
     deadline: '',
     completed: false,
   });
-
+      
+  
   const handleChange = (e) => {
     setTodo({...todo, [e.target.name]: e.target.value});
   };
 
-  const handleCheckboxChange = (todoId) => {
-    let updatedTodo;
+  const handleCheckboxChange = async (todoId) => {
+    let updatedTodoItem;
     setTodos((prevTodos) =>
       prevTodos.map((todo) => {
-        const updatedTodo = todo.id === todoId ? { ...todo, completed: !todo.completed } : todo;
-        console.log(updatedTodo.id);
-        console.log(updatedTodo.completed);
-        return updatedTodo;
+        updatedTodoItem = todo.id === todoId ? { ...todo, completed: !todo.completed } : todo;
+        console.log(updatedTodoItem.id);
+        console.log(updatedTodoItem.completed);
+        return updatedTodoItem;
       })
     );
-    try{
-      //make post request to server
-      axios.post('http://localhost:5000/update-todo', updatedTodo);
-    } catch(err){
-      //log error if any
-      console.error('Error updating',err);
-      console.log(updatedTodo);
+    try {
+      // Make post request to server using the correct variable
+      await axios.post('http://localhost:5000/update-todo', updatedTodoItem);
+    } catch (err) {
+      // Log error if any
+      console.error('Error updating', err);
+      console.log(updatedTodoItem);
     }
   };
+  
   
 const handleSubmit = async (e) => {
   e.preventDefault();
