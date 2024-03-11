@@ -15,8 +15,9 @@ def before_request():
 def add_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     data = request.get_json()
-    g.todos.append(data['todo'])
-
+    # print(data)
+    g.todos.append(data)
+    print(g.todos)
     dict = {"response" : g.todos, "size" : len(g.todos)}
     return jsonify(dict)
 
@@ -50,7 +51,7 @@ def delete_todo():
 def update_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     data = request.get_json()
-    todo = data["todo"]
+    todo = data
 
     for i in range(len(g.todos)):
         if(i["id"] == id):
@@ -72,6 +73,29 @@ def clear_todo():
     g.todos = []
     dict = {"response" : g.todos, "size" : len(g.todos)}
     return jsonify(dict)
+
+@app.route("/completed-todo", methods = ["POST"])
+def completed_todo():
+    # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
+    data = request.get_json()
+    print(data)
+    id = data["id"]
+    for i in range(len(g.todos)):
+        if(i["id"] == id):
+
+            i["completed"] = not i["completed"]
+            dict = {"response" : g.todos, "size" : len(g.todos)}
+            return jsonify(dict)
+    dict = {"response" : "not found", "size" : len(g.todos)}
+    return jsonify(dict)
+    
+
+
+
+
+if __name__ == "__main__":
+    app.run(debug = True, port = 5000)
+
 
 
 
