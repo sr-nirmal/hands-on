@@ -6,6 +6,7 @@ import Form from './Form';
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [size, setSize] = useState(0);
   const [todo, setTodo] = useState({
     id: 1,
     title: '',
