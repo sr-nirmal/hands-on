@@ -1,24 +1,23 @@
-from flask import Flask, request, g, jsonify
+from flask import Flask, request, g, jsonify, session
 from flask_cors import CORS
 
 
 app = Flask(__name__)
 CORS(app)
-
-@app.before_request
-def before_request():
-    g.todos = []
-    pass
-
+app.secret_key = "sjfsdkfbskbf"
+arr = []
 
 @app.route("/add-todo", methods = ["POST"])
 def add_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     data = request.get_json()
     # print(data)
-    g.todos.append(data)
-    print(g.todos)
-    dict = {"response" : g.todos, "size" : len(g.todos)}
+    if('todo' not in session):
+        session["todo"] = []
+    session["todo"].append(data)
+    
+    print(session['todo'], data)
+    dict = {"response" : session['todo'], "size" : len(session['todo'])}
     return jsonify(dict)
 
 
@@ -94,6 +93,7 @@ def completed_todo():
 
 
 if __name__ == "__main__":
+    
     app.run(debug = True, port = 5000)
 
 
