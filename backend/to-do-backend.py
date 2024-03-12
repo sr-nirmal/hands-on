@@ -7,24 +7,37 @@ CORS(app)
 app.secret_key = "sjfsdkfbskbf"
 arr = []
 
+
+
+
 @app.route("/add-todo", methods = ["POST"])
 def add_todo():
-    # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     data = request.get_json()
-    # print(data)
-    if('todo' not in session):
-        session["todo"] = []
-    session["todo"].append(data)
-    
-    print(session['todo'], data)
-    dict = {"response" : session['todo'], "size" : len(session['todo'])}
-    return jsonify(dict)
+    todo = data.get("todo", {})  # Extract 'todo' from JSON data
+
+    for i in range(len(arr)):
+        if(arr[i]["id"] == todo['id']):
+            arr[i]["title"] = todo["title"]
+            arr[i]["description"] = todo["description"]
+            arr[i]["deadline"] = todo["deadline"]
+            arr[i]["completed"] = todo["completed"] 
+
+            dict = {"response" : arr, "size" : len(arr)}
+            return jsonify(dict)
+
+
+    todo['id'] = len(arr) + 1
+    arr.append(todo)
+    print(arr)
+    response_dict = {"response": arr, "size": len(arr)}
+    return jsonify(response_dict)
 
 
 @app.route("/get-todo", methods = ["GET"])
 def get_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
-    dict = {"response" : g.todos, "size" : len(g.todos)}
+    dict = {"response" : arr, "size" : len(arr)}
+    print(arr)
     return jsonify(dict)
 
 
@@ -34,13 +47,13 @@ def delete_todo():
     data = request.get_json()
     id = data["id"]
 
-    for i in range(len(g.todos)):
-        if(i["id"] == id):
-            g.todos.pop(i)
-            dict = {"response" : g.todos, "size" : len(g.todos)}
+    for i in range(len(arr)):
+        if(arr[i]["id"] == id):
+            arr.pop(i)
+            dict = {"response" : arr, "size" : len(arr)}
             return jsonify(dict)
 
-    dict = {"response" : g.todos, "size" : len(g.todos)}
+    dict = {"response" : arr, "size" : len(arr)}
     return jsonify(dict)
 
 
@@ -50,27 +63,28 @@ def delete_todo():
 def update_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
     data = request.get_json()
-    todo = data
+    todo = data["todo"]
+    print("in update todo -> ", todo)
+    for i in range(len(arr)):
+        if(arr[i]["id"] == todo['id']):
+            arr[i]["title"] = todo["title"]
+            arr[i]["description"] = todo["description"]
+            arr[i]["deadline"] = todo["deadline"]
+            arr[i]["completed"] = todo["completed"] 
 
-    for i in range(len(g.todos)):
-        if(i["id"] == id):
-            g.todos[i]["title"] = todo["title"]
-            g.todos[i]["decription"] = todo["decription"]
-            g.todos[i]["deadline"] = todo["deadline"]
-            g.todos[i]["completed"] = todo["completed"] 
-
-            dict = {"response" : g.todos, "size" : len(g.todos)}
+            dict = {"response" : arr, "size" : len(arr)}
             return jsonify(dict)
 
             
-    return jsonify(response = "not found")
+    dict = {"response" : arr, "size" : len(arr)}
+    return jsonify(dict)
 
 
 @app.route("/clear-todo", methods = ["POST"])
 def clear_todo():
     # {id : int, title : string, decription : string ,deadline : string , completed : True/False}
-    g.todos = []
-    dict = {"response" : g.todos, "size" : len(g.todos)}
+    arr = []
+    dict = {"response" : arr, "size" : len(arr)}
     return jsonify(dict)
 
 @app.route("/completed-todo", methods = ["POST"])
@@ -79,13 +93,13 @@ def completed_todo():
     data = request.get_json()
     print(data)
     id = data["id"]
-    for i in range(len(g.todos)):
-        if(i["id"] == id):
-
-            i["completed"] = not i["completed"]
-            dict = {"response" : g.todos, "size" : len(g.todos)}
+    for i in range(len(arr)):
+        if(arr[i]["id"] == id):
+            print(id, arr[i])
+            arr[i]["completed"] = not arr[i]["completed"]
+            dict = {"response" : arr, "size" : len(arr)}
             return jsonify(dict)
-    dict = {"response" : "not found", "size" : len(g.todos)}
+    dict = {"response" : "not found", "size" : len(arr)}
     return jsonify(dict)
     
 
